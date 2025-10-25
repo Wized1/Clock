@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Clock</title>
+    <style>
+        body {
+            background-color: #121212; /* Dark background similar to your search app */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .clock {
+            background-color: #1E1E1E; /* Slightly lighter background for the clock */
+            padding: 30px 50px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            color: #FFFFFF; /* White text */
+        }
+
+        .time {
+            font-size: 70px;
+            font-weight: bold;
+            letter-spacing: 5px;
+        }
+
+        .date {
+            font-size: 20px;
+            font-weight: normal;
+            letter-spacing: 1px;
+            color: #B0B0B0; /* Light gray for date */
+            margin-top: 10px;
+        }
+
+        .colon {
+            color: #FF8C00; /* Material You-inspired orange for the colon */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="clock">
+        <div class="time" id="time">
+            <span id="hours">00</span><span class="colon">:</span><span id="minutes">00</span><span class="colon">:</span><span id="seconds">00</span>
+        </div>
+        <div class="date" id="date">Saturday, 22 October 2025</div>
+    </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const day = now.toLocaleString('en-US', { weekday: 'long' });
+            const date = now.getDate();
+            const month = now.toLocaleString('en-US', { month: 'long' });
+            const year = now.getFullYear();
+
+            // Update the time and date in the clock
+            document.getElementById("hours").textContent = hours;
+            document.getElementById("minutes").textContent = minutes;
+            document.getElementById("seconds").textContent = seconds;
+            document.getElementById("date").textContent = `${day}, ${date} ${month} ${year}`;
+        }
+
+        setInterval(updateClock, 1000); // Update every second
+        updateClock(); // Initialize clock on load
+    </script>
+</body>
+</html>
