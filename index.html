@@ -5,29 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Clock</title>
     <style>
+        /* Dark mode default styles */
         body {
-            background-color: #121212; /* Dark background similar to your search app */
+            background-color: #121212; /* Dark background for default mode */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s ease;
+            overflow: hidden;
+            user-select: none; /* Prevent text selection globally */
         }
 
         .clock {
-            background-color: #1E1E1E; /* Slightly lighter background for the clock */
+            background-color: #1F1B24; /* Dark background with a soft theme */
             padding: 30px 50px;
-            border-radius: 20px;
+            border-radius: 20px; /* Rounded corners */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
             text-align: center;
             color: #FFFFFF; /* White text */
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+            box-sizing: border-box;
+            user-select: none; /* Prevent text selection inside the clock container */
         }
 
         .time {
-            font-size: 70px;
+            font-size: 60px; /* Smaller font size for better fit */
             font-weight: bold;
-            letter-spacing: 5px;
+            letter-spacing: 3px; /* Reduced letter-spacing */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px; /* Reduced gap between time elements */
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .ampm {
+            font-size: 20px;
+            color: #FF8C00; /* Orange for AM/PM */
+            font-weight: 500;
+            padding: 5px 15px;
+            background-color: #333333;
+            border-radius: 15px;
+            margin-top: 10px;
         }
 
         .date {
@@ -39,25 +67,76 @@
         }
 
         .colon {
-            color: #FF8C00; /* Material You-inspired orange for the colon */
+            color: #FF8C00; /* Orange for the colon */
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #FF8C00; /* Accent color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: #FF6F00;
+        }
+
+        /* Light mode styles */
+        body.light-mode {
+            background-color: #F4F4F4; /* Light background for light mode */
+        }
+
+        .clock.light-mode {
+            background-color: #FFFFFF; /* White background for light mode */
+            color: #333333; /* Dark text for light mode */
+        }
+
+        .date.light-mode {
+            color: #555555;
+        }
+
+        .colon.light-mode {
+            color: #FF5722; /* Light mode accent color */
+        }
+
+        .toggle-btn.light-mode {
+            background-color: #FF5722; /* Light mode accent color */
         }
 
     </style>
 </head>
 <body>
+    <button class="toggle-btn" id="toggleBtn">Switch to Light Mode</button>
+
     <div class="clock">
         <div class="time" id="time">
             <span id="hours">00</span><span class="colon">:</span><span id="minutes">00</span><span class="colon">:</span><span id="seconds">00</span>
         </div>
+        <div class="ampm" id="ampm">AM</div>
         <div class="date" id="date">Saturday, 22 October 2025</div>
     </div>
 
     <script>
         function updateClock() {
             const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
+            let hours = now.getHours();
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+
+            // Convert to 12-hour format
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            hours = String(hours).padStart(2, '0');
+
             const day = now.toLocaleString('en-US', { weekday: 'long' });
             const date = now.getDate();
             const month = now.toLocaleString('en-US', { month: 'long' });
@@ -67,11 +146,21 @@
             document.getElementById("hours").textContent = hours;
             document.getElementById("minutes").textContent = minutes;
             document.getElementById("seconds").textContent = seconds;
+            document.getElementById("ampm").textContent = ampm;
             document.getElementById("date").textContent = `${day}, ${date} ${month} ${year}`;
         }
 
         setInterval(updateClock, 1000); // Update every second
         updateClock(); // Initialize clock on load
+
+        const toggleBtn = document.getElementById('toggleBtn');
+        toggleBtn.addEventListener('click', () => {
+            // Toggle between light and dark mode
+            document.body.classList.toggle('light-mode');
+            document.querySelector('.clock').classList.toggle('light-mode');
+            const isLightMode = document.body.classList.contains('light-mode');
+            toggleBtn.textContent = isLightMode ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+        });
     </script>
 </body>
 </html>
