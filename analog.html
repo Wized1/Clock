@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Endroid Clock – Analog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --md-sys-color-primary: #03dac6;
+      --md-sys-color-primary-container: #018786;
+      --md-sys-color-on-primary: #000000;
+      --md-sys-color-surface: #121212;
+      --md-sys-color-surface-container: #1e1e1e;
+      --md-sys-color-on-surface: #ffffff;
+      --md-sys-color-shadow: rgba(0,0,0,0.4);
+      --md-sys-motion-easing: cubic-bezier(0.2, 0, 0, 1);
+    }
+    [data-theme="light"] {
+      --md-sys-color-primary: #018786;
+      --md-sys-color-primary-container: #03dac6;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-surface: #f9f9f9;
+      --md-sys-color-surface-container: #ffffff;
+      --md-sys-color-on-surface: #121212;
+      --md-sys-color-shadow: rgba(0,0,0,0.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 32px;
+      transition: background 0.4s var(--md-sys-motion-easing);
+      overflow: hidden;
+    }
+
+    /* Clock Container */
+    .clock-container {
+      position: relative;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: var(--md-sys-color-surface-container);
+      box-shadow: 0 12px 40px var(--md-sys-color-shadow);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s var(--md-sys-motion-easing);
+    }
+
+    /* Clock Face */
+    .clock-face {
+      position: relative;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 70%);
+    }
+
+    /* Numbers */
+    .number {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--md-sys-color-on-surface);
+      opacity: 0.7;
+    }
+    .number span {
+      display: block;
+      transform: translateY(-108px);
+    }
+
+    /* Hands */
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      border-radius: 50px;
+      transition: transform 0.1s var(--md-sys-motion-easing);
+      z-index: 10;
+    }
+    .hour-hand {
+      width: 8px;
+      height: 70px;
+      background: var(--md-sys-color-on-surface);
+      margin-left: -4px;
+      box-shadow: 0 0 8px var(--md-sys-color-shadow);
+    }
+    .minute-hand {
+      width: 6px;
+      height: 100px;
+      background: var(--md-sys-color-on-surface);
+      margin-left: -3px;
+      opacity: 0.9;
+    }
+    .second-hand {
+      width: 2px;
+      height: 110px;
+      background: var(--md-sys-color-primary);
+      margin-left: -1px;
+    }
+    .center-dot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: var(--md-sys-color-primary);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 11;
+      box-shadow: 0 0 12px var(--md-sys-color-primary);
+    }
+
+    /* Buttons */
+    .btn {
+      position: absolute;
+      top: 24px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s var(--md-sys-motion-easing);
+    }
+    .btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
+    }
+    [data-theme="light"] .btn {
+      background: rgba(0,0,0,0.1);
+    }
+    [data-theme="light"] .btn:hover {
+      background: rgba(0,0,0,0.2);
+    }
+    #themeToggle { left: 24px; }
+    #digitalBtn { right: 24px; }
+
+    .material-symbols-rounded {
+      font-size: 24px;
+      color: var(--md-sys-color-on-surface);
+      font-variation-settings: 'FILL' 1;
+    }
+
+    @media (max-width: 480px) {
+      .clock-container { width: 240px; height: 240px; }
+      .clock-face { width: 200px; height: 200px; }
+      .number span { transform: translateY(-88px); font-size: 16px; }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <!-- Theme Toggle -->
+  <div class="btn" id="themeToggle">
+    <span class="material-symbols-rounded" id="themeIcon">dark_mode</span>
+  </div>
+
+  <!-- Digital Button -->
+  <div class="btn" id="digitalBtn" onclick="location.href='index.html'">
+    <span class="material-symbols-rounded">schedule</span>
+  </div>
+
+  <!-- Analog Clock -->
+  <div class="clock-container">
+    <div class="clock-face" id="face">
+      <!-- Numbers will be injected via JS -->
+    </div>
+    <div class="hand hour-hand" id="hour"></div>
+    <div class="hand minute-hand" id="minute"></div>
+    <div class="hand second-hand" id="second"></div>
+    <div class="center-dot"></div>
+  </div>
+
+  <script>
+    const hourHand = document.getElementById('hour');
+    const minuteHand = document.getElementById('minute');
+    const secondHand = document.getElementById('second');
+    const face = document.getElementById('face');
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    // Create numbers
+    for (let i = 1; i <= 12; i++) {
+      const num = document.createElement('div');
+      num.className = 'number';
+      num.style.transform = `rotate(${i * 30}deg)`;
+      num.innerHTML = `<span style="transform: rotate(-${i * 30}deg)">${i}</span>`;
+      face.appendChild(num);
+    }
+
+    // Update Clock
+    function setClock() {
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const minutes = now.getMinutes();
+      const hours = now.getHours() % 12;
+
+      const secondDeg = (seconds / 60) * 360 + 90;
+      const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6 + 90;
+      const hourDeg = (hours / 12) * 360 + (minutes / 60) * 30 + 90;
+
+      secondHand.style.transform = `rotate(${secondDeg}deg)`;
+      minuteHand.style.transform = `rotate(${minuteDeg}deg)`;
+      hourHand.style.transform = `rotate(${hourDeg}deg)`;
+    }
+
+    setInterval(setClock, 1000);
+    setClock();
+
+    // Theme
+    document.addEventListener('DOMContentLoaded', () => {
+      const theme = localStorage.getItem('endroid-clock-theme') || 'dark';
+      document.body.dataset.theme = theme;
+      themeIcon.textContent = theme === 'dark' ? 'dark_mode' : 'light_mode';
+    });
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.body.dataset.theme === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.body.dataset.theme = newTheme;
+      localStorage.setItem('endroid-clock-theme', newTheme);
+      themeIcon.textContent = newTheme === 'dark' ? 'dark_mode' : 'light_mode';
+    });
+  </script>
+</body>
+</html>

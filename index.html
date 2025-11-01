@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Endroid Clock</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <style>
+    :root {
+      --md-sys-color-primary: #03dac6;
+      --md-sys-color-primary-container: #018786;
+      --md-sys-color-on-primary: #000000;
+      --md-sys-color-surface: #121212;
+      --md-sys-color-surface-container: #1e1e1e;
+      --md-sys-color-on-surface: #ffffff;
+      --md-sys-color-shadow: rgba(0,0,0,0.4);
+      --md-sys-motion-easing: cubic-bezier(0.2, 0, 0, 1);
+    }
+    [data-theme="light"] {
+      --md-sys-color-primary: #018786;
+      --md-sys-color-primary-container: #03dac6;
+      --md-sys-color-on-primary: #ffffff;
+      --md-sys-color-surface: #f9f9f9;
+      --md-sys-color-surface-container: #ffffff;
+      --md-sys-color-on-surface: #121212;
+      --md-sys-color-shadow: rgba(0,0,0,0.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 32px;
+      transition: background 0.4s var(--md-sys-motion-easing);
+      overflow: hidden;
+    }
+    .clock-container {
+      background: var(--md-sys-color-surface-container);
+      border-radius: 28px;
+      padding: 28px;
+      width: 100%;
+      max-width: 380px; /* Tighter box */
+      box-shadow: 0 8px 32px var(--md-sys-color-shadow);
+      text-align: center;
+      transition: all 0.3s var(--md-sys-motion-easing);
+    }
+    .time {
+      font-size: 14vw; /* Reduced from 16vw */
+      font-weight: 900;
+      letter-spacing: -0.5vw;
+      color: var(--md-sys-color-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+    }
+    .colon {
+      color: var(--md-sys-color-primary);
+      animation: blink 1s infinite;
+      font-weight: 900;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    .ampm {
+      font-size: 4vw; /* Reduced */
+      font-weight: 700;
+      color: var(--md-sys-color-primary);
+      margin-top: 6px;
+      letter-spacing: 1vw;
+    }
+    .date {
+      font-size: 4.2vw; /* Reduced */
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+      margin-top: 10px;
+      letter-spacing: 0.4vw;
+    }
+    [data-theme="light"] .date { color: rgba(0,0,0,0.7); }
+
+    /* Buttons */
+    .btn {
+      position: absolute;
+      top: 24px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s var(--md-sys-motion-easing);
+    }
+    .btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
+    }
+    [data-theme="light"] .btn {
+      background: rgba(0,0,0,0.1);
+    }
+    [data-theme="light"] .btn:hover {
+      background: rgba(0,0,0,0.2);
+    }
+    #themeToggle { left: 24px; }
+    #analogBtn { right: 24px; } /* Only two buttons now */
+
+    .material-symbols-rounded {
+      font-size: 24px;
+      color: var(--md-sys-color-on-surface);
+      font-variation-settings: 'FILL' 1;
+    }
+
+    @media (max-width: 480px) {
+      .time { font-size: 18vw; }
+      .ampm { font-size: 5.5vw; }
+      .date { font-size: 5.8vw; }
+      .clock-container { padding: 24px; max-width: 340px; }
+    }
+  </style>
+</head>
+<body data-theme="dark">
+
+  <!-- Theme Toggle -->
+  <div class="btn" id="themeToggle">
+    <span class="material-symbols-rounded" id="themeIcon">dark_mode</span>
+  </div>
+
+  <!-- Analog Button -->
+  <div class="btn" id="analogBtn" onclick="location.href='analog.html'">
+    <span class="material-symbols-rounded">schedule</span>
+  </div>
+
+  <!-- Clock -->
+  <div class="clock-container">
+    <div class="time" id="time">
+      <span id="hours">12</span><span class="colon">:</span><span id="minutes">00</span><span class="colon">:</span><span id="seconds">00</span>
+    </div>
+    <div class="ampm" id="ampm">AM</div>
+    <div class="date" id="date">Loading...</div>
+  </div>
+
+  <script>
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const ampmEl = document.getElementById('ampm');
+    const dateEl = document.getElementById('date');
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+
+    // Load theme
+    document.addEventListener('DOMContentLoaded', () => {
+      const theme = localStorage.getItem('endroid-clock-theme') || 'dark';
+      document.body.dataset.theme = theme;
+      themeIcon.textContent = theme === 'dark' ? 'dark_mode' : 'light_mode';
+      updateClock();
+      setInterval(updateClock, 100);
+    });
+
+    // Toggle theme
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.body.dataset.theme === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.body.dataset.theme = newTheme;
+      localStorage.setItem('endroid-clock-theme', newTheme);
+      themeIcon.textContent = newTheme === 'dark' ? 'dark_mode' : 'light_mode';
+    });
+
+    // Update Clock
+    function updateClock() {
+      const now = new Date();
+      let h = now.getHours();
+      const m = now.getMinutes().toString().padStart(2, '0');
+      const s = now.getSeconds().toString().padStart(2, '0');
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      h = h.toString().padStart(2, '0');
+
+      hoursEl.textContent = h;
+      minutesEl.textContent = m;
+      secondsEl.textContent = s;
+      ampmEl.textContent = ampm;
+
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      dateEl.textContent = now.toLocaleDateString(undefined, options);
+    }
+  </script>
+</body>
+</html>

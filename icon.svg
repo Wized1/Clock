@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark Background -->
+  <rect width="512" height="512" rx="96" fill="#121212"/>
+
+  <!-- Gradient -->
+  <defs>
+    <linearGradient id="teal-g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#03dac6"/>
+      <stop offset="100%" stop-color="#018786"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Clock Circle -->
+  <circle cx="256" cy="256" r="240" fill="url(#teal-g)" filter="url(#shadow)"/>
+
+  <!-- Center Dot -->
+  <circle cx="256" cy="256" r="12" fill="#ffffff"/>
+
+  <!-- Hour Hand (⬆️ Up - Shorter) -->
+  <line x1="256" y1="256" x2="256" y2="200" stroke="#333" stroke-width="20" stroke-linecap="round"/>
+
+  <!-- Minute Hand (➡️ Right - Shorter) -->
+  <line x1="256" y1="256" x2="320" y2="256" stroke="#333" stroke-width="16" stroke-linecap="round"/>
+
+  <!-- Markers -->
+  <circle cx="256" cy="76" r="10" fill="#333" opacity="0.8"/>
+  <circle cx="416" cy="256" r="10" fill="#333" opacity="0.8"/>
+  <circle cx="256" cy="436" r="10" fill="#333" opacity="0.8"/>
+  <circle cx="96" cy="256" r="10" fill="#333" opacity="0.8"/>
+
+  <!-- Outer Ring -->
+  <circle cx="256" cy="256" r="240" fill="none" stroke="#03dac6" stroke-width="6" opacity="0.5"/>
+</svg>
